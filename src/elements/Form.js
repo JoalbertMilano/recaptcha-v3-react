@@ -1,4 +1,4 @@
-import styled from "styled-components"
+import styled, { css } from "styled-components"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 const colors = {
@@ -11,18 +11,19 @@ const Form = styled.form`
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 20px;
-
-    @media (max-width: 800px){
-        gird-template-columns: 1fr;
-    }
 `
 
 const Label = styled.label`
     display: block;
     font-weight: 700;
+    margin-left: 10px;
     padding: 10px 0;
     min-height: 40px;
     cursor: pointer;
+
+    ${props => props.valid === 'false' && css`
+        color: ${colors.error};
+    `}
 `
 
 const InputGroup = styled.div`
@@ -49,6 +50,14 @@ const Input = styled.input`
         outline: none;
         box-shadow: 3px 0 30px rgba(163,163,163,0.4);
     }
+
+    ${props => props.valid === 'true' && css`
+        border: solid 3px transparent;
+    `}
+
+    ${props => props.valid === 'false' && css`
+        border: solid 3px ${colors.error} !important;
+    `}
 `
 const ValideIcon = styled(FontAwesomeIcon)`
     position: absolute;
@@ -56,6 +65,16 @@ const ValideIcon = styled(FontAwesomeIcon)`
     font-size: 16px;
     opacity: 0;
     z-index: 20px;
+
+    ${props => props.valid === 'true' && css`
+        opacity: 1;
+        color: ${colors.success};
+    `}
+
+    ${props => props.valid === 'false' && css`
+        opacity: 1;
+        color: ${colors.error};
+    `}
 `
 
 const ErrorInput = styled.p`
@@ -63,6 +82,14 @@ const ErrorInput = styled.p`
     font-size: 12px;
     color: ${colors.error};
     display: none;
+
+    ${props => props.valid === 'true' && css`
+        display: none;
+    `}
+
+    ${props => props.valid === 'false' && css`
+        display: block;
+    `}
 `;
 
 const TermsContainer = styled.div`
@@ -84,7 +111,6 @@ const ErrorMessage = styled.div`
 const SuccessMessage = styled.p`
     font-size: 14px;
     color: ${colors.success};
-    display: none;
 `
 
 const ButtonContainer = styled.div`

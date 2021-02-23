@@ -1,33 +1,155 @@
 import React , { useState } from 'react'
-import {Form, Label, InputGroup, Input, ValideIcon, ErrorMessage, TermsContainer, ErrorInput, SuccessMessage, ButtonContainer,  Button} from './elements/Form'
+import {Form, Label, ErrorMessage, TermsContainer, SuccessMessage, ButtonContainer,  Button} from './elements/Form'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCheckCircle, faTimesCircle, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons'
+import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons'
+import InputComponent from './components/Input'
 
 const App = () => {
 
+    const [user, setUser] = useState({campo: '', valido: null})
+    const [name, setName] = useState({campo: '', valido: null})
+    const [password, setPassword] = useState({campo: '', valido: null})
+    const [confirmedPassword, setConfirmedPassword] = useState({campo: '', valido: null})
+    const [email, setEmail] = useState({campo: '', valido: null})
+    const [phone, setPhone] = useState({campo: '', valido: null})
+    const [terms, setTerms] = useState(false)
+    const [validForm, setValidForm] = useState(null)
+
+    const expressions = {
+        user: /^[a-zA-Z0-9_-]{4,16}$/, // Letras, numeros, guion y guion_bajo
+        name: /^[a-zA-ZÀ-ÿ\s]{1,40}$/, // Letras y espacios, pueden llevar acentos.
+        password: /^.{4,12}$/, // 4 a 12 digitos.
+        email: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
+        phone: /^\d{7,14}$/ // 7 a 14 numeros.
+    }
+
+    const validateConfirmedPassword = () =>{
+        if(password.campo.length > 0){
+            if(password.campo !== confirmedPassword.campo){
+                setConfirmedPassword((prevState) =>{
+                    return {...prevState, valido: 'false'}
+                })
+            }
+            else{
+                setConfirmedPassword((prevState) =>{
+                    return {...prevState, valido: 'true'}
+                })
+            }
+        }
+    }
+
+    const onChangeTerminos = (e) => {
+        setTerms(e.target.checked)
+    }
+
+    const onSubmit = (e) => {
+        e.preventDefault()
+
+        if(
+            user.valido === 'true' &&
+            name.valido === 'true' &&
+            password.valido === 'true' &&
+            confirmedPassword.valido === 'true' &&
+            email.valido === 'true' &&
+            phone.valido === 'true' &&
+            terms
+        ){
+            setValidForm(true)
+            setUser({campo: '', valido: null})
+            setName({campo: '', valido: null})
+            setPassword({campo: '', valido: null})
+            setConfirmedPassword({campo: '', valido: null})
+            setEmail({campo: '', valido: null})
+            setPhone({campo: '', valido: null})
+            setTerms(false)
+        }
+        else{
+            setValidForm(false)
+        }
+    }
+
   return (
     <main className="app">
-        <Form>
-            <div>
-                <Label htmlFor="">Usuario</Label>
-                <InputGroup>
-                    <Input type="text" placeholder="usuario"/>
-                    <ValideIcon icon={faCheckCircle}/>
-                </InputGroup>
-                <ErrorInput>Texto de ejemplo</ErrorInput>
-            </div>
+        <Form action="" onSubmit={onSubmit}>
+            <InputComponent 
+                state={user}
+                setState={setUser}
+                type="text"
+                label="Usuario"
+                placeholder="Ingresa un usuario"
+                name="usuario"
+                errorInputMessage="El usuario tiene que ser de 4 a 16 digitos y solo puede contener numeros, letras y guion bajo."
+                regularExpression={expressions.user}
+            />  
+            <InputComponent 
+                state={name}
+                setState={setName}
+                type="text"
+                label="Nombre"
+                placeholder="Ingresa un Nombre"
+                name="nombre"
+                errorInputMessage="El nombre solo puede contener letras y espacios."
+                regularExpression={expressions.name}
+            />
+            <InputComponent 
+                state={password}
+                setState={setPassword}
+                type="password"
+                label="Contraseña"
+                placeholder="Ingresa una contraseña"
+                name="password"
+                errorInputMessage="La contraseña tiene que ser de 4 a 12 digitos."
+                regularExpression={expressions.password}
+            />
+            <InputComponent 
+                state={confirmedPassword}
+                setState={setConfirmedPassword}
+                type="password"
+                label="Confirmar contraseña"
+                placeholder="Confirma la contraseña"
+                name="confirmedPassword"
+                errorInputMessage="Ambas contraseñas deben ser iguales."
+                funcion={validateConfirmedPassword}
+            />
+            <InputComponent 
+                state={email}
+                setState={setEmail}
+                type="email"
+                label="Correo"
+                placeholder="Ingresa un correo"
+                name="email"
+                errorInputMessage="El correo solo puede contener letras, numeros, puntos, guiones y guion bajo."
+                regularExpression={expressions.email}
+            />
+            <InputComponent 
+                state={phone}
+                setState={setPhone}
+                type="text"
+                label="Telefono"
+                placeholder="Ingresa un telefono"
+                name="phone"
+                errorInputMessage="El telefono solo puede contener numerosm un minimo de 7 digitos y un maximo de 14 digitos."
+                regularExpression={expressions.phone}
+            />
+
             <TermsContainer>
                 <Label>
-                    <input type="checkbox" name="terms" id="terms" />
+                    <input 
+                        type="checkbox" 
+                        name="terms" 
+                        id="terms" 
+                        checked={terms} 
+                        onChange={onChangeTerminos}
+                    />
                     Acepto los Terminos y Condiciones
                 </Label>
             </TermsContainer>
-            {false && <ErrorMessage>
+            {validForm === false && <ErrorMessage>
                 <p><FontAwesomeIcon icon={faExclamationTriangle} /><b>Error:</b> Por favor rellena el formulario correctamente</p>
             </ErrorMessage>}
             <ButtonContainer>
                 <Button type="submit">Enviar</Button>
-                <SuccessMessage>El formulario se envio correctamente</SuccessMessage>
+                {validForm === true && <SuccessMessage>El formulario se envio correctamente</SuccessMessage>}
             </ButtonContainer>
         </Form>
     </main>
