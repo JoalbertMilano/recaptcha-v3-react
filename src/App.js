@@ -1,8 +1,10 @@
 import React , { useState } from 'react'
 import {Form, Label, ErrorMessage, TermsContainer, SuccessMessage, ButtonContainer,  Button} from './elements/Form'
+import { UserList} from './elements/UsersList'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons'
 import InputComponent from './components/Input'
+import UserCard from './components/UserCard'
 
 const App = () => {
 
@@ -69,7 +71,7 @@ const App = () => {
     }
 
   return (
-    <main className="app">
+    <main>
         <Form action="" onSubmit={onSubmit}>
             <InputComponent 
                 state={user}
@@ -148,10 +150,41 @@ const App = () => {
                 <p><FontAwesomeIcon icon={faExclamationTriangle} /><b>Error:</b> Por favor rellena el formulario correctamente</p>
             </ErrorMessage>}
             <ButtonContainer>
-                <Button type="submit">Enviar</Button>
+                <Button type="submit">Crear</Button>
                 {validForm === true && <SuccessMessage>El formulario se envio correctamente</SuccessMessage>}
             </ButtonContainer>
         </Form>
+        <UserList>
+            <h3>Uusarios registrados</h3>
+            <UserCard 
+                id="1564683"
+                user="DrackMaster"
+                name="Joalbert Milano"
+                email="joalbertmilano@gmail.com"
+                phone="123456789"
+            />
+            <UserCard 
+                id="1564683"
+                user="DrackMaster"
+                name="Joalbert Milano"
+                email="joalbertmilano@gmail.com"
+                phone="123456789"
+            />
+            <UserCard 
+                id="1564683"
+                user="DrackMaster"
+                name="Joalbert Milano"
+                email="joalbertmilano@gmail.com"
+                phone="123456789"
+            />
+            <UserCard 
+                id="1564683"
+                user="DrackMaster"
+                name="Joalbert Milano"
+                email="joalbertmilano@gmail.com"
+                phone="123456789"
+            />
+        </UserList>
     </main>
   );
 }

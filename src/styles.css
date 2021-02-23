@@ -10,10 +10,3 @@ body {
     background-color: ghostwhite;
     font-family: 'Fira Sans', sans-serif;
 }
-
-main {
-    width: 90%;
-    max-width: 800px;
-    margin: auto;
-    padding: 40px;
-}
