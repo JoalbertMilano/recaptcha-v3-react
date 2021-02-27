@@ -1,7 +1,8 @@
-import React , { useState } from 'react'
+import React , { useState, useRef, useCallback } from 'react'
 import {Form, Label, ErrorMessage, TermsContainer, SuccessMessage, ButtonContainer,  Button} from './elements/Form'
 import { UserList} from './elements/UsersList'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { GoogleReCaptcha, useGoogleReCaptcha } from 'react-google-recaptcha-v3' 
 import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons'
 import InputComponent from './components/Input'
 import UserCard from './components/UserCard'
@@ -16,14 +17,16 @@ const App = () => {
     const [phone, setPhone] = useState({campo: '', valido: null})
     const [terms, setTerms] = useState(false)
     const [validForm, setValidForm] = useState(null)
+    const [token, setToken] = useState('')
 
     const expressions = {
-        user: /^[a-zA-Z0-9_-]{4,16}$/, // Letras, numeros, guion y guion_bajo
-        name: /^[a-zA-ZÀ-ÿ\s]{1,40}$/, // Letras y espacios, pueden llevar acentos.
-        password: /^.{4,12}$/, // 4 a 12 digitos.
+        user: /^[a-zA-Z0-9_-]{4,16}$/, 
+        name: /^[a-zA-ZÀ-ÿ\s]{1,40}$/,
+        password: /^.{4,12}$/,
         email: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
-        phone: /^\d{7,14}$/ // 7 a 14 numeros.
+        phone: /^\d{7,14}$/
     }
+
 
     const validateConfirmedPassword = () =>{
         if(password.campo.length > 0){
@@ -44,7 +47,16 @@ const App = () => {
         setTerms(e.target.checked)
     }
 
+    const onVerifyRecaptcha = useCallback(
+        token => {
+            setToken(token)
+            console.log(token)
+        },
+        [setToken]
+    )
+
     const onSubmit = (e) => {
+
         e.preventDefault()
 
         if(
@@ -64,6 +76,7 @@ const App = () => {
             setEmail({campo: '', valido: null})
             setPhone({campo: '', valido: null})
             setTerms(false)
+
         }
         else{
             setValidForm(false)
@@ -133,7 +146,6 @@ const App = () => {
                 errorInputMessage="El telefono solo puede contener numerosm un minimo de 7 digitos y un maximo de 14 digitos."
                 regularExpression={expressions.phone}
             />
-
             <TermsContainer>
                 <Label>
                     <input 
@@ -145,6 +157,9 @@ const App = () => {
                     />
                     Acepto los Terminos y Condiciones
                 </Label>
+                <GoogleReCaptcha
+                    onVerify={onVerifyRecaptcha}
+                />
             </TermsContainer>
             {validForm === false && <ErrorMessage>
                 <p><FontAwesomeIcon icon={faExclamationTriangle} /><b>Error:</b> Por favor rellena el formulario correctamente</p>
