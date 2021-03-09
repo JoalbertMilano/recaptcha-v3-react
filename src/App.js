@@ -60,12 +60,12 @@ const App = () => {
         e.preventDefault()
 
         if(
-            user.valido === 'true' &&
-            name.valido === 'true' &&
-            password.valido === 'true' &&
-            confirmedPassword.valido === 'true' &&
-            email.valido === 'true' &&
-            phone.valido === 'true' &&
+            // user.valido === 'true' &&
+            // name.valido === 'true' &&
+            // password.valido === 'true' &&
+            // confirmedPassword.valido === 'true' &&
+            // email.valido === 'true' &&
+            // phone.valido === 'true' &&
             terms
         ){
             setValidForm(true)
@@ -76,7 +76,15 @@ const App = () => {
             setEmail({campo: '', valido: null})
             setPhone({campo: '', valido: null})
             setTerms(false)
-
+            
+            let VERIFY_TOKEN_URL = `http://localhost:3001/recaptcha/verify`
+            fetch(VERIFY_TOKEN_URL, {
+                method: 'POST', 
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ token: token }),
+            })
         }
         else{
             setValidForm(false)

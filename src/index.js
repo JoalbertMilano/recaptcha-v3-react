@@ -7,7 +7,7 @@ import './styles.css';
 
 ReactDOM.render(
   <React.StrictMode>
-    <GoogleReCaptchaProvider reCaptchaKey="6Lc1N2gaAAAAAHY_uY56KLr4rHMHTpmJmrJJgq_w">
+    <GoogleReCaptchaProvider reCaptchaKey="6LfcCncaAAAAAGiaTzkhj7lfHZQajcf6s4WrjZum">
         <App />
     </GoogleReCaptchaProvider> 
   </React.StrictMode>,
